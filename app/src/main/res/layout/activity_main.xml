@@ -21,11 +21,27 @@
         android:layout_height="wrap_content"
         android:text="Location and Contacts" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Setting"
+        android:id="@+id/button_setting"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AlertWindow"
+        android:id="@+id/bt_alertwindow"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_has_setting"
+        android:text="有Setting权限吗"/>
+
     <fragment
         android:id="@+id/fragment"
         android:name="pub.devrel.easypermissions.sample.MainFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_main" />
-
 </LinearLayout>
