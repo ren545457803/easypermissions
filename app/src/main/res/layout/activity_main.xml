@@ -16,27 +16,16 @@
         android:text="Camera" />
 
     <Button
-        android:id="@+id/button_location_and_wifi"
+        android:id="@+id/button_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location and Contacts" />
+        android:text="Location" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Setting"
-        android:id="@+id/button_setting"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AlertWindow"
-        android:id="@+id/bt_alertwindow"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bt_has_setting"
-        android:text="有Setting权限吗"/>
+        android:text="Baidu"
+        android:id="@+id/button_baidu"/>
 
     <fragment
         android:id="@+id/fragment"
@@ -44,4 +33,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_main" />
+
 </LinearLayout>

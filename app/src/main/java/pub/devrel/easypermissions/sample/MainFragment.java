@@ -1,25 +1,16 @@
 package pub.devrel.easypermissions.sample;
 
-import android.Manifest;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.util.List;
+import pub.devrel.easypermissions.sample.permission.PermissionFragment;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
-public class MainFragment extends Fragment implements
-        EasyPermissions.PermissionCallbacks {
+public class MainFragment extends PermissionFragment {
 
     private static final String TAG = "MainFragment";
-    private static final int RC_SMS_PERM = 122;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,10 +20,19 @@ public class MainFragment extends Fragment implements
         View v =  inflater.inflate(R.layout.fragment_main, container);
 
         // Button click listener
-        v.findViewById(R.id.button_sms).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.button_jpush).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                smsTask();
+                Log.d(TAG,"请求JPush任务");
+                jpushTask();
+            }
+        });
+
+        v.findViewById(R.id.button_2_contacts).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG,"请求读取联系人任务");
+                contactsTask();
             }
         });
 
@@ -40,32 +40,12 @@ public class MainFragment extends Fragment implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        // EasyPermissions handles the request result.
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @AfterPermissionGranted(RC_SMS_PERM)
-    private void smsTask() {
-        if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.READ_SMS)) {
-            // Have permission, do the thing!
-            Toast.makeText(getActivity(), "TODO: SMS things", Toast.LENGTH_LONG).show();
-        } else {
-            // Request one permission
-            EasyPermissions.requestPermissions(this, getString(R.string.rationale_sms),
-                    RC_SMS_PERM, Manifest.permission.READ_SMS);
-        }
+    protected void performContacts() {
+        Log.d(TAG,"执行Contacts任务");
     }
 
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
+    protected void performJPush() {
+        Log.d(TAG,"执行JPsuh任务");
     }
 }

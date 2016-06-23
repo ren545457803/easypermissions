@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+  <string name="perm_sorry">给点权限吧，不好意思啊</string>
+  <string name="perm_call_phone">需要直接拨打客服电话</string>
+  <string name="perm_camera">需要相机扫描二维码</string>
+  <string name="perm_contacts">需要直接打开通讯录选择联系人</string>
+  <string name="perm_location">需要直接定位您现在的未知</string>
+  <string name="perm_umeng">为了更好的统计，改善软件质量</string>
+  <string name="perm_baidu">为了使用百度地图</string>
+  <string name="perm_jpush">为了给您推送物流跟踪记录</string>
+  <string name="perm_qq">为了使用QQ语音</string>
+  <string name="perm_autoupdate">为了自动升级软件版本</string>
+</resources>

@@ -1,6 +1,7 @@
 # EasyPermissions
 
-基于https://github.com/googlesamples/easypermissions，添加了两个特殊权限的申请SYSTEM_ALERT_WINDOW和WRITE_SETTINGS
+基于https://github.com/googlesamples/easypermissions
+添加了两个特殊权限的申请SYSTEM_ALERT_WINDOW和WRITE_SETTINGS
 EasyPermissions is a wrapper library to simplify basic system permissions logic when targeting
 Android M or higher.
 
@@ -9,6 +10,40 @@ Android M or higher.
 Clone我的项目吧，还不会使用gradle依赖，会了以后再改。
 
 ## Usage
+
+### 项目快速集成权限申请模块
+
+1. 项目依赖easypermissions模块
+2. 复制包permission到你的项目
+3. 所有的Activity和Fragment(需要申请权限)继承相应的PermissionActivity和PermissionFragment
+
+#### 修改相应代码满足自己项目的需要
+例子，需要申请定位权限：
+
+ * 在`PermissionUtil`中声明此权限`public static final String[] LOCATION_PERMISSION = { ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION }`和
+对应申请此权限使用的CODE`public static final int RC_LOCATION_PERM = RC_CONTACTS_PERM + 1`
+
+ * 在`PermissionActivity`中实现此权限申请的逻辑代码
+ ```java
+ 
+ @AfterPermissionGranted(RC_LOCATION_PERM)
+     public void locationTask() {
+         if (hasPermissions(this, LOCATION_PERMISSION)) {
+             performLocation();
+         } else {
+             performRequestPermission(R.string.perm_location, RC_LOCATION_PERM, LOCATION_PERMISSION);
+         }
+     }
+    
+    //子类要重载此方法
+    protected void performLocation() {
+            throw new RuntimeException(NOT_RELOAD_ERROR);
+         }
+ ```
+
+ * 在业务Activity,如`MainActivity`中申请并使用此权限。
+使用`locationTask()`申请，然后，覆写`performLocation()`,并在此方法中使用定位相关的权限。
+
 
 ### Basic
 

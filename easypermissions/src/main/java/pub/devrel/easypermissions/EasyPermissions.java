@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
@@ -30,11 +29,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+
 
 /**
  * Utility to request and check System permissions for apps targeting Android M (API >= 23).
@@ -87,6 +89,11 @@ public class EasyPermissions {
    * {@link Settings#ACTION_MANAGE_WRITE_SETTINGS},使用{@link Settings.System#canWrite(Context)}检测
    */
   private static boolean hasSpecialPermission(Context context, String perm) {
+    if (!Settings.ACTION_MANAGE_OVERLAY_PERMISSION.equals(perm)
+        && !Settings.ACTION_MANAGE_WRITE_SETTINGS.equals(perm)) {// 如果不是特殊权限则返回false
+      return false;
+    }
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {// API>=23才有的 即Android 6.0
       if (Settings.ACTION_MANAGE_OVERLAY_PERMISSION.equals(perm)) {
         return Settings.canDrawOverlays(context);
@@ -144,7 +151,12 @@ public class EasyPermissions {
     }
 
     if (shouldShowRationale) {
-      AlertDialog dialog = new AlertDialog.Builder(getActivity(object)).setMessage(rationale)
+      Activity activity = getActivity(object);
+      if (null == activity) {
+        return;
+      }
+
+      AlertDialog dialog = new AlertDialog.Builder(activity).setMessage(rationale)
           .setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
               executePermissionsRequest(object, perms, requestCode);
@@ -332,7 +344,7 @@ public class EasyPermissions {
 
   private static void runAnnotatedMethods(Object object, int requestCode) {
     Class clazz = object.getClass();
-    for (Method method : clazz.getDeclaredMethods()) {
+    for (Method method : clazz.getMethods()) {
       if (method.isAnnotationPresent(AfterPermissionGranted.class)) {
         // Check for annotated methods with matching request code.
         AfterPermissionGranted ann = method.getAnnotation(AfterPermissionGranted.class);
@@ -381,5 +393,24 @@ public class EasyPermissions {
         && !Settings.ACTION_MANAGE_WRITE_SETTINGS.equals(perm)) {
       throw new IllegalArgumentException("permission must is a special permission");
     }
+  }
+
+  /**
+   * 剔除已经有了的权限
+   *
+   * @param object Fragment或者Activity
+   */
+  public static String[] excludeHadPermissions(Object object, String... perms) {
+    List<String> permsList = new ArrayList(Arrays.asList(perms));
+
+    Iterator<String> iterator = permsList.iterator();
+    while (iterator.hasNext()) {
+      String perm = iterator.next();
+      if (EasyPermissions.hasPermissions(getActivity(object), perm)) {// 如果权限已存在，则删除
+        iterator.remove();
+      }
+    }
+
+    return permsList.toArray(new String[] {});
   }
 }
